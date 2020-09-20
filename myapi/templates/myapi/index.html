@@ -4,24 +4,25 @@
 <title>Notebook</title>
 
 <style>
-  body{ font:14px Arial, sans-serif; }
+  body{ font:14px sans-serif; }
+  .notegrid{ column-width:280px; margin:2%; }
   .note{
     background: yellow; border:1px solid #aaa;
     margin-bottom:5%; padding:5%;
     break-inside: avoid; position:relative; 
   }
-  .note h2{ margin:0; }
-  .note h5{ 
+  .title{ margin:0; }
+  .subject{ 
     display:inline-block; border:1px solid #aaa; border-radius:5px; 
     background:#fff; padding:5px; font-weight:normal; color:#555; 
   }
-  main{ column-width:280px; margin:2%; }
   .content{ margin-bottom:20px; line-height:1.4; }
   .date{ text-align:right; font-size:10px; color:#aaa; }
   .x{ position:absolute; top:10px; right:10px; background:none; border:0; color:#ccc; }
   .x:hover{ opacity:1; cursor:pointer; color:#c00; }
+
   .new{ 
-    position:fixed; bottom:30px; right:30px;; padding:0 16px; opacity:.6;
+    position:fixed; bottom:30px; right:30px;; padding:0 20px 5px; opacity:.6;
     font-size:48px; border-radius:50px; background:#c00; color:#fff; 
     box-shadow: 0 4px 12px 0 rgba(0,0,0,0.4); border:1px solid #fff;
   }
@@ -34,14 +35,14 @@
 
 <body>
 
-  <main>
+  <main class=notegrid>
     {% for note in notes %}
-    <div class="note">
-      <h2>{{note.title}}</h2>
-      <h5>{{note.subject}}</h5>
+    <div class=note>
+      <h2 class=title>{{note.title}}</h2>
+      <h5 class=subject>{{note.subject}}</h5>
       <div class=content>{{note.content}}</div>
       <div class=date>{{note.modified}}</div>
-      <form action="/delete/{{note.id}}" method="POST">
+      <form action="/delete/{{note.id}}" method=POST>
         {% csrf_token %}
         <button type=submit class=x title="Delete Note">X</button>
       </form>
@@ -49,16 +50,16 @@
     {% endfor%}
   </main>
 
-  <b class=new title="New Note" onclick="dlg.showModal()">+</b>
+  <b class=new title="Add New Note" onclick="dlg.showModal()">+</b>
   <dialog id=dlg>
     <h3>New Note</h3>
-    <form method="POST">
+    <form method=POST>
       {% csrf_token %}
       {{form}}
-      <input type="submit" value=Save>
+      <input type=submit value=Save>
     </form>
     <form method=dialog>
-      <button title=Cancel class=x>X</button>
+      <button title="Cancel" class=x>X</button>
     </form>
   </dialog>
 
