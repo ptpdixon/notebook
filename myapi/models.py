@@ -3,8 +3,7 @@ from django.utils import timezone
 
 class Note(models.Model):
   title = models.CharField(max_length=60)
-  subject = models.CharField(max_length=10, default='Junk')
-#   subject = models.TextChoices('Subject', 'Physics Chemistry Biology')
+  subject = models.CharField(max_length=10, default='General')
   content = models.TextField()
   modified = models.DateTimeField(auto_now=True)
 

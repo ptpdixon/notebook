@@ -1,13 +1,19 @@
-from rest_framework import viewsets, serializers
+from django.shortcuts import render, redirect
 
+from .forms import NoteForm
 from .models import Note
 
-class NoteSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Note
-    fields = ('id', 'title', 'subject', 'content', 'modified')
-        
-class NoteViewSet(viewsets.ModelViewSet):
-  queryset = Note.objects.all() #.order_by('name')
-  serializer_class = NoteSerializer
+def index(request):
+  if request.method == "POST":
+    form = NoteForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('index')
 
+  notes = Note.objects.order_by("-modified")
+  return render(request,'myapi/index.html', {"form":NoteForm(), "notes":notes})
+
+
+def delete(request, note_id):
+  Note.objects.get(id=note_id).delete()
+  return redirect('index')
